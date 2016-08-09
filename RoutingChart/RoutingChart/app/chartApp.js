@@ -5,7 +5,7 @@ chartApp.config(function () {
 });
 
 chartApp.controller('pqroutecontroller',
-    function ($scope, $q) {
+    function ($scope) {
         console.log('controller loaded');
 
         $scope.parameters = {}
@@ -35,55 +35,46 @@ chartApp.controller('pqroutecontroller',
             console.log($scope.modelRows);
         };
 
+        $scope.value = 5;
 
-        var calculateQSim = function () {
-            var obsArr = [
-                '0.08', '0.08', '0.8', '0.09', '3.12', '8.25', '8.59', '6.17', '5.33', '5.33', '3.57', '3.57',
-                    '2.57', '2.17', '1.87', '1.66', '1.48', '1.34', '1.24', '1.14', '1.04', '0.97', '0.87', '0.77',
-                    '0.67'
-            ];
-            var arr = [];
+
+        $scope.calculateQSim = function (obsArr) {
             angular.forEach(obsArr,
                 function (value) {
-                    arr.push(value * 1.5);
+                    $scope.tmpQSim.push(value * 1.5);
                 });
-
-            return arr;
         };
 
         $scope.drawChart = function () {
             console.log('drawChart click');
 
-            //$scope.labels = $scope.tmpTimespans;
-            $scope.labels = [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26
-            ];
-
-            $scope.data = [
-                //$scope.tmpPrecipitations,
-                $scope.tmpPrecipitations = [
+            $scope.tmpPrecipitations = [
                     '0.1', '0', '0.8', '0.9', '20.9', '17.9', '2.7', '1.4', '1.4', '0', '0', '0', '0', '0.6', '0.2',
                     '0.2', '0.2', '0.4', '0', '0', '0', '0', '0', '0', '0'
-                ],
-
-                //$scope.tmpTemperature,
-                $scope.tmpTemperature = [
+            ],
+              $scope.tmpTemperature = [
                     '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
                     '0', '0', '0', '0', '0'
-                ],
-
-                 //$scope.tmpQObs
+              ],
                 $scope.tmpQObs = [
                     '0.08', '0.08', '0.8', '0.09', '3.12', '8.25', '8.59', '6.17', '5.33', '5.33', '3.57', '3.57',
                     '2.57', '2.17', '1.87', '1.66', '1.48', '1.34', '1.24', '1.14', '1.04', '0.97', '0.87', '0.77',
                     '0.67'
                 ],
+            $scope.tmpTimespans = [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26
+            ];
 
-                calculateQSim()
-                //$q.when(calculateQSim()).then(
-                //    function(output) {
-                //        $scope.tmpQSim = output;
-                //    })
+            $scope.calculateQSim($scope.tmpQObs);
+
+
+
+            $scope.labels = $scope.tmpTimespans;
+            $scope.data = [
+                $scope.tmpPrecipitations,
+                $scope.tmpTemperature,
+                $scope.tmpQObs,
+                $scope.tmpQSim
             ];
 
             $scope.datasetOverride = [{
@@ -113,16 +104,16 @@ chartApp.controller('pqroutecontroller',
             $scope.options = {
                 scales: {
                     yAxes: [{
-                          id: 'y-axis-1',
-                          type: 'linear',
-                          display: true,
-                          position: 'right',
-                          scaleLabel: {
-                              display: true,
-                              labelString: 'vf m3/s'
-                          }
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'neb mm'
+                        }
 
-                      },
+                    },
                       {
                           id: 'y-axis-2',
                           type: 'linear',
@@ -130,7 +121,7 @@ chartApp.controller('pqroutecontroller',
                           position: 'left',
                           scaleLabel: {
                               display: true,
-                              labelString: 'neb mm'
+                              labelString: 'vf m3/s'
                           }
                       }
                     ]
