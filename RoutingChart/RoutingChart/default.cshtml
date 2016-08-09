@@ -1,0 +1,146 @@
+﻿
+
+<div class="col-sm-offset-1 col-sm-10" ng-app="chartApp" ng-controller="pqroutecontroller">
+
+    TODO: Specify resolution
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Model Input
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-sm-2 ">
+                            <label for="date">Dato</label>
+                            <div class="input-group">
+                                <input type="text" id="date" for="date" class="form-control" placeholder="Dato" ng-model="modelRow.timespan" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                            <label for="precipitation">Nedbør</label>
+                            <div class="input-group">
+                                <input type="text" id="precipitation" for="precipitation" class="form-control" placeholder="Nedbør" ng-model="modelRow.precipitation" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                            <label for="date">Temperatur</label>
+                            <div class="input-group">
+                                <input type="text" id="temperature" for="temperature" class="form-control" placeholder="Temperatur" ng-model="modelRow.temperature" ng-init="modelRow.temperature = 0" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                            <label for="date">Qobs</label>
+                            <div class="input-group">
+                                <input type="text" id="qObs" for="qObs" class="form-control" placeholder="Qobs" ng-model="modelRow.qObs" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                            <label for="date">Qsim</label>
+                            <div class="input-group">
+                                <input type="text" id="qSim" for="qSim" class="form-control" placeholder="Qsim" ng-model="modelRow.qSim" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>&nbsp;</label>
+                            <div class="input-group">
+                                <button class="btn btn-primary" ng-click="addModelRow()">Legg til</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-repeat="row in modelRows" class="row" style="text-align: center">
+                        <div class="form-group col-sm-2">
+                            {{row.timespan}}
+                        </div>
+                        <div class="form-group col-sm-2">
+                            {{row.precipitation}}
+                        </div>
+                        <div class="form-group col-sm-2">
+                            {{row.temperature}}
+                        </div>
+                        <div class="form-group col-sm-2">
+                            {{row.qObs}}
+                        </div>
+                        <div class="form-group col-sm-2">
+                            {{row.qSim}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="form-group col-sm-offset-2 col-sm-8" ng-if="modelRows.length > 0">*@
+            <div class="form-group">
+                <button class="btn btn-info btn-block" ng-click="drawChart()">Kjør modell</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Model Parameter
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-sm-8">
+                            <label for="param1">Param_1</label>
+                            <div class="input-group">
+                                <input type="text" id="param1" for="param1" class="form-control" placeholder="Param1" ng-model="parameters.param1" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>&nbsp;</label>
+                            <div class="input-group">
+                                <div>cm</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-8">
+                            <label for="param1">Param_2</label>
+                            <div class="input-group">
+                                <input type="text" id="param2" for="param2" class="form-control" placeholder="Param2" ng-model="parameters.param2" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>&nbsp;</label>
+                            <div class="input-group">
+                                <div>cm</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-8">
+                            <label for="param1">Param_3</label>
+                            <div class="input-group">
+                                <input type="text" id="param3" for="param3" class="form-control" placeholder="Param3" ng-model="parameters.param3" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <label>&nbsp;</label>
+                            <div class="input-group">
+                                <div>cm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Model Output
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <canvas id="base" class="chart-bar"
+                        chart-data="data"
+                        chart-labels="labels"
+                        chart-colors="colors"
+                        chart-dataset-override="datasetOverride"
+                        chart-options="options"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
