@@ -1,48 +1,45 @@
 ﻿
 
 <div class="col-sm-offset-1 col-sm-10" ng-app="chartApp" ng-controller="pqroutecontroller">
-
-    TODO: Specify resolution
-
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Model Input
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="form-group col-sm-2 ">
-                            <label for="date">Dato</label>
+                        <div class="form-group col-sm-3 ">
+                            <label for="date">Tid</label>
                             <div class="input-group">
-                                <input type="text" id="date" for="date" class="form-control" placeholder="Dato" ng-model="modelRow.timespan" />
+                                <input type="text" id="date" for="date" class="form-control" placeholder="" ng-model="modelRow.timespan" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-2 ">
+                        <div class="form-group col-sm-3 ">
                             <label for="precipitation">Nedbør</label>
                             <div class="input-group">
-                                <input type="text" id="precipitation" for="precipitation" class="form-control" placeholder="Nedbør" ng-model="modelRow.precipitation" />
+                                <input type="text" id="precipitation" for="precipitation" class="form-control" placeholder="mm" ng-model="modelRow.precipitation" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-2 ">
+                        <div class="form-group col-sm-3 ">
                             <label for="date">Temperatur</label>
                             <div class="input-group">
-                                <input type="text" id="temperature" for="temperature" class="form-control" placeholder="Temperatur" ng-model="modelRow.temperature" ng-init="modelRow.temperature = 0" />
+                                <input type="text" id="temperature" for="temperature" class="form-control" placeholder="C" ng-model="modelRow.temperature" ng-init="modelRow.temperature = 0" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-2 ">
-                            <label for="date">Qobs</label>
-                            <div class="input-group">
-                                <input type="text" id="qObs" for="qObs" class="form-control" placeholder="Qobs" ng-model="modelRow.qObs" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-2 ">
-                            <label for="date">Qsim</label>
-                            <div class="input-group">
-                                <input type="text" id="qSim" for="qSim" class="form-control" placeholder="Qsim" ng-model="modelRow.qSim" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-2">
+                        @*<div class="form-group col-sm-2 ">
+                                <label for="date">Qobs</label>
+                                <div class="input-group">
+                                    <input type="text" id="qObs" for="qObs" class="form-control" placeholder="m3/s" ng-model="modelRow.qObs" />
+                                </div>
+                            </div>*@
+                        @*<div class="form-group col-sm-2 ">
+                                <label for="date">Qsim</label>
+                                <div class="input-group">
+                                    <input type="text" id="qSim" for="qSim" class="form-control" placeholder="m3/s" ng-model="modelRow.qSim" />
+                                </div>
+                            </div>*@
+                        <div class="form-group col-sm-3">
                             <label>&nbsp;</label>
                             <div class="input-group">
                                 <button class="btn btn-primary" ng-click="addModelRow()">Legg til</button>
@@ -62,66 +59,286 @@
                         <div class="form-group col-sm-2">
                             {{row.qObs}}
                         </div>
-                        <div class="form-group col-sm-2">
-                            {{row.qSim}}
-                        </div>
+                        @*<div class="form-group col-sm-2">
+                                {{row.qSim}}
+                            </div>*@
                     </div>
-
                 </div>
             </div>
             @*<div class="form-group col-sm-offset-2 col-sm-8" ng-if="modelRows.length > 0">*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-body">
+                        <i><b>K1</b> = 0.0135 + 0.00268 * H<sub>L</sub> - 0.01665 * ln(A<sub>se</sub>)</i>
+                        <p>
+                            <b>K1</b> = {{K1 = 0.0135 + 0.00268 * parameters.relief - 0.01665 * (parameters.sjoprosent|logarithmic)}}
+                        </p>
+                        <i><b>K2</b> = 0.0009 + 0.21 * K<sub>1</sub> - 0.00021 * Q<sub>N</sub></i>
+                        <p>
+                            <b>K2</b> = {{K2 = 0.0009 + 0.21 * K1 - 0.00021 * parameters.relief}}
+                        </p>
+                        <i><b>T</b> = -9.0 + 4.4 * K<sub>1</sub><sup>-0.6</sup> + 0.28 * Q<sub>N</sub></i>
+                        <p>
+                            <b>T</b> = {{T = -9.0 + 4.4 * (K2|power:-0.6) + 0.28 * parameters.normal_avlop}}
+                        </p>
+
+                        <i><b>Q1<sub>1</sub></b> = k1 * uz</i>
+                        <p>
+                            <b>Q1</b> = {{Q1 = parameters.k1 * parameters.upper_zone}}
+                        </p>
+                        @*<div ng-if="parameters.upper_zone <= parameters.threshold">
+                                <i><b>Q1<sub>1</sub></b> = k1 * uz</i>
+                                <p>
+                                    <b>Q1</b> = {{Q1 = parameters.k1 * parameters.upper_zone}}
+                                </p>
+                            </div>
+                        <div ng-if="parameters.upper_zone > parameters.threshold">
+                            <i><b>Q1<sub>1</sub></b> = kuz1 * (uz * uz1) + kuz * uz1</i>
+                            <p>
+                                <b>Q1</b> = {{Q1 = parameters.k2 * (parameters.upper_zone - parameters.threshold) + parameters.k1 * parameters.threshold}}
+                            </p>
+                        </div>
+
+                        <i><b>Q2</b> = k1z * lz</i>
+                        <p>
+                            <b>Q2</b> = {{Q2 = parameters.coefficient * parameters.lower_zone_storage}}
+                        </p>
+
+                        <div class="panel-body">
+                            <i><b>Q = Q1 + Q2</b></i>
+                            <p>
+                                <b>Q</b> = {{Q1 + Q2}}
+                            </p>
+                        </div>
+                    </div>
+                </div>*@
+
             <div class="form-group">
                 <button class="btn btn-info btn-block" ng-click="drawChart()">Kjør modell</button>
             </div>
+
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Model Parameter
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="form-group col-sm-8">
-                            <label for="param1">Param_1</label>
+                        <div class="form-group col-sm-6">
+                            <label for="sjoprosent">Effektiv sjøprosent (A<sub>SE</sub>)</label>
                             <div class="input-group">
-                                <input type="text" id="param1" for="param1" class="form-control" placeholder="Param1" ng-model="parameters.param1" />
+                                <input type="text" id="sjoprosent" for="sjoprosent" class="form-control" placeholder="%" ng-model="parameters.sjoprosent" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-2">
-                            <label>&nbsp;</label>
+                        <div class="form-group col-sm-6">
+                            <label for="relief">Relief forh. H50/LF (H<sub>L</sub>)</label>
                             <div class="input-group">
-                                <div>cm</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-8">
-                            <label for="param1">Param_2</label>
-                            <div class="input-group">
-                                <input type="text" id="param2" for="param2" class="form-control" placeholder="Param2" ng-model="parameters.param2" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-2">
-                            <label>&nbsp;</label>
-                            <div class="input-group">
-                                <div>cm</div>
+                                <input type="text" id="relief" for="relief" class="form-control" placeholder="m/km" ng-model="parameters.relief" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-8">
-                            <label for="param1">Param_3</label>
+                        <div class="form-group col-sm-6">
+                            <label for="avlop">Normal avløp (Q<sub>N</sub>)</label>
                             <div class="input-group">
-                                <input type="text" id="param3" for="param3" class="form-control" placeholder="Param3" ng-model="parameters.param3" />
+                                <input type="text" id="avlop" for="avlop" class="form-control" placeholder="l/s*km2" ng-model="parameters.normal_avlop" />
                             </div>
                         </div>
-                        <div class="form-group col-sm-2">
-                            <label>&nbsp;</label>
+                        <div class="form-group col-sm-6">
+                            <dl>
+                                <dt>K1</dt><dd>{{modelParam.k1}}</dd>
+                                <dt>K2</dt><dd>{{modelParam.k2}}</dd>
+                                <dt>T&nbsp;</dt><dd>{{modelParam.t}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="soilwatermoisture">Soil water moisture (sm)</label>
                             <div class="input-group">
-                                <div>cm</div>
+                                <input type="text" id="soilwatermoisture" for="soilwatermoisture" class="form-control" placeholder="mm" ng-model="parameters.soil_water_moisture" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="fieldcapacity">Field capacity (fc)</label>
+                            <div class="input-group">
+                                <input type="text" id="fieldcapacity" for="fieldcapacity" class="form-control" placeholder="" ng-model="parameters.field_capacity" />
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="beta">Beta (b)</label>
+                            <div class="input-group">
+                                <input type="text" id="beta" for="beta" class="form-control" placeholder="mm" ng-model="parameters.beta" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="precipiation">Precipiation (P)</label>
+                            <div class="input-group">
+                                <input type="text" id="precipiation" for="precipiation" class="form-control" placeholder="mm" ng-model="parameters.precipiation" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="areal">Areal (A)</label>
+                            <div class="input-group">
+                                <input type="text" id="areal" for="areal" class="form-control" placeholder="km2" ng-model="parameters.areal" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="h75">Hypsografisk kurve (H75)</label>
+                            <div class="input-group">
+                                <input type="text" id="h75" for="h75" class="form-control" placeholder="m" ng-model="parameters.h75" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="h25">Hypsografisk kurve (H25)</label>
+                            <div class="input-group">
+                                <input type="text" id="h25" for="h25" class="form-control" placeholder="m" ng-model="parameters.h25" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="hoydeforskjell">Høydeforskjell (H50)</label>
+                            <div class="input-group">
+                                <input type="text" id="hoydeforskjell" for="hoydeforskjell" class="form-control" placeholder="m" ng-model="parameters.hoydeforskjell" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="feltakse">Feltaksens lengde (L<sub>E</sub>)</label>
+                            <div class="input-group">
+                                <input type="text" id="feltakse" for="feltakse" class="form-control" placeholder="km" ng-model="parameters.feltakse" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="k1">Tømming kons (K1)</label>
+                            <div class="input-group">
+                                <input type="text" id="k1" for="k1" class="form-control" placeholder="" ng-model="parameters.k1" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="k2">Tømming kons (K2)</label>
+                            <div class="input-group">
+                                <input type="text" id="k2" for="k2" class="form-control" placeholder="" ng-model="parameters.k2" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="threshold">Threshold (UZ1)</label>
+                            <div class="input-group">
+                                <input type="text" id="threshold" for="threshold" class="form-control" placeholder="mm" ng-model="parameters.threshold" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="konsentrasjonstid">Konsentrasjonstid (T)</label>
+                            <div class="input-group">
+                                <input type="text" id="konsentrasjonstid" for="konsentrasjonstid" class="form-control" placeholder="hours" ng-model="parameters.konsentrasjonstid" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="percolation">Percolation (Perc)</label>
+                            <div class="input-group">
+                                <input type="text" id="percolation" for="percolation" class="form-control" placeholder="mm/hr" ng-model="parameters.percolation" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="k3">Tøming kons lower (K3)</label>
+                            <div class="input-group">
+                                <input type="text" id="k3" for="k3" class="form-control" placeholder="mm/hr" ng-model="parameters.k3" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group col-sm-6">
+                            <label for="qobsstart">Qobs - start</label>
+                            <div class="input-group">
+                                <input type="text" id="qobsstart" for="qobsstart" class="form-control" placeholder="" ng-model="parameters.qobs_start" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="coefficient">Coefficient (klz)</label>
+                            <div class="input-group">
+                                <input type="text" id="coefficient" for="coefficient" class="form-control" placeholder="mm/hr" ng-model="parameters.coefficient" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="maxstorage">Max storage (lzmax)</label>
+                            <div class="input-group">
+                                <input type="text" id="maxstorage" for="maxstorage" class="form-control" placeholder="mm/hr" ng-model="parameters.max_storage" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="lowerzonestorage">Lower zone storage (lz)</label>
+                            <div class="input-group">
+                                <input type="text" id="lowerzonestorage" for="lowerzonestorage" class="form-control" placeholder="mm/hr" ng-model="parameters.lower_zone_storage" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="nonamev">(V)</label>
+                            <div class="input-group">
+                                <input type="text" id="nonamev" for="nonamev" class="form-control" placeholder="mm/hr" ng-model="parameters.noname_v" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="nonametmp">(tmp)</label>
+                            <div class="input-group">
+                                <input type="text" id="nonametmp" for="nonametmp" class="form-control" placeholder="" ng-model="parameters.noname_tmp" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="upperzone">Upper zone storage (uz)</label>
+                            <div class="input-group">
+                                <input type="text" id="upperzone" for="upperzone" class="form-control" placeholder="mm/hr" ng-model="parameters.upper_zone" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="infiltration">Infiltration (DUZ)</label>
+                            <div class="input-group">
+                                <input type="text" id="infiltration" for="infiltration" class="form-control" placeholder="" ng-model="parameters.infiltration" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="potentialevaporation">Pot. evaporation (EP)</label>
+                            <div class="input-group">
+                                <input type="text" id="potentialevaporation" for="potentialevaporation" class="form-control" placeholder="mm/hr" ng-model="parameters.potential_evaporation" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-sm-6">
+                            <label for="discharge">Discharge (Q)</label>
+                            <div class="input-group">
+                                <input type="text" id="discharge" for="discharge" class="form-control" placeholder="m3/sec" ng-model="parameters.discharge" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-info btn-block" ng-click="calculateModel()">Beregn modell</button>
                 </div>
             </div>
         </div>
